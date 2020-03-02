@@ -6,7 +6,8 @@
 namespace dualventer {
 
 struct Snowflake {
-  Snowflake();
+  Snowflake() = delete;
+  Snowflake(std::uint_fast64_t _id) : id(_id) {}
 
   const std::uint_fast64_t id;
 };
