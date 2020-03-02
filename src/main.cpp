@@ -1,7 +1,7 @@
-#include <iostream>
-#include <asio.hpp>
+#include "bot.hpp"
 
 int main() {
-  std::cout << "Hello, World!" << std::endl;
+  dualventer::Bot bot("token");
+
   return 0;
 }
