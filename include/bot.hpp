@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <filesystem>
 
-using fs = std::filesystem;
+namespace fs = std::filesystem;
 
 namespace dualventer {
 
