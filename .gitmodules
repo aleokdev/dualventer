@@ -9,4 +9,4 @@
 	url = https://github.com/whoshuu/cpr
 [submodule "lib/sws"]
 	path = lib/sws
-	url = https://github.com/eidheim/Simple-WebSocket-Server
+	url = https://gitlab.com/eidheim/Simple-WebSocket-Server.git
