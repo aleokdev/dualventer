@@ -1,2 +1,7 @@
 cmake-build-debug/
-.idea/
+.idea
+.idea/.gitignore
+.idea/dualventer.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
