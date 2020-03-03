@@ -3,6 +3,8 @@ project(dualventer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(dualventer src/main.cpp src/bot.cpp)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/modules" DESTINATION "${PROJECT_BINARY_DIR}/")
+
+add_executable(dualventer src/main.cpp src/bot.cpp src/context.cpp)
 target_include_directories(dualventer PRIVATE include/)
 add_subdirectory(lib)
