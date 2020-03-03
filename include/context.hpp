@@ -105,6 +105,7 @@ struct Attachment {
   int width;  // -1 if not image
 };
 
+// https://discordapp.com/developers/docs/resources/channel#embed-object
 struct Embed {
   std::string title;
   std::string type;
