@@ -78,6 +78,34 @@ void Context::send(sol::table table) {
           } else if (embed_key.as<std::string>() == "description") {
             sw.Key("description");
             sw.String(embed_val.as<std::string>().c_str());
+          } else if (embed_key.as<std::string>() == "fields") {
+            sw.Key("fields");
+            if(!embed_val.is<sol::table>())
+              throw std::runtime_error(
+                  "Expected array in fields key of embed object inside Context::send");
+            sw.StartArray();
+            for(auto& [_, field] : embed_val.as<sol::table>()) {
+              sw.StartObject();
+              for(auto& [field_key, field_val] : field.as<sol::table>()) {
+                if (!field_key.is<std::string>())
+                  throw std::runtime_error(
+                      "Expected string keys in fields object of embed argument inside Context::send");
+                if (field_key.as<std::string>() == "name") {
+                  sw.Key("name");
+                  sw.String(field_val.as<std::string>().c_str());
+                }
+                if (field_key.as<std::string>() == "value") {
+                  sw.Key("value");
+                  sw.String(field_val.as<std::string>().c_str());
+                }
+                if (field_key.as<std::string>() == "inline") {
+                  sw.Key("inline");
+                  sw.Bool(field_val.as<bool>());
+                }
+              }
+              sw.EndObject();
+            }
+            sw.EndArray();
           }
         }
         sw.EndObject();
@@ -103,6 +131,7 @@ void Context::send(sol::table table) {
   sw.Key("tts");
   sw.Bool(false);
   sw.EndObject();
+  std::cout << buf.GetString() << std::endl;
   auto r = cpr::Post(
       cpr::Url{Bot::api_url + "/channels/" + message.channel.id.to_string() +
                "/messages"},
