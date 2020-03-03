@@ -24,19 +24,31 @@ public:
   Bot(std::string token);
   ~Bot();
 
+  std::string get_token();
+
   void load_module(fs::path const&);
+
+  void run();
 
   void send_message(Snowflake const& channel_id, std::string const&);
 
   const inline static std::string api_url{"https://discordapp.com/api/v6"};
+
+  // Lua API
+  void add_command(sol::table);
+
 
 private:
   std::atomic<bool> connection_closed = false;
   std::atomic<size_t> last_sequence_number = -1;
   std::thread heartbeat;
   Client client;
+  sol::state lua_state;
+
+  static void setup_usertypes(sol::state&);
 
   const std::string token;
+  const std::string prefix = ">>";
 
   std::string get_gateway_uri();
 
