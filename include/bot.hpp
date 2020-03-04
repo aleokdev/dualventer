@@ -21,7 +21,7 @@ class Bot {
 public:
   using Client = SimpleWeb::SocketClient<SimpleWeb::WSS>;
 
-  Bot(std::string token);
+  Bot(std::string token, fs::path modules_dir);
   ~Bot();
 
   std::string get_token();
@@ -42,7 +42,6 @@ private:
   std::atomic<bool> connection_closed = false;
   std::atomic<size_t> last_sequence_number = -1;
   std::thread heartbeat;
-  Client client;
   sol::state lua_state;
 
   static void setup_usertypes(sol::state&);
@@ -53,6 +52,9 @@ private:
   std::string get_gateway_uri();
 
   std::unordered_map<std::string, Command> commands;
+  void load_commands(fs::path dir);
+
+  Client client;
 
   void heartbeat_func(std::size_t interval, std::shared_ptr<Client::Connection> connection);
 };

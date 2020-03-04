@@ -7,9 +7,7 @@ int main() {
   char buf[256];
   f.getline(buf, 256, '\n');
 
-  dualventer::Bot bot(buf);
-  for(auto& module_path : fs::directory_iterator(fs::path("modules")))
-    bot.load_module(module_path);
+  dualventer::Bot bot(buf, fs::path("modules"));
   bot.run();
   std::cin.get();
 

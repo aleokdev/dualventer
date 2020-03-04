@@ -13,12 +13,15 @@
 
 namespace dualventer {
 
-Bot::Bot(std::string t) : token(std::move(t)), client(get_gateway_uri()) {
+Bot::Bot(std::string t, fs::path modules_dir)
+    : token(std::move(t)),
+      client(get_gateway_uri()) {
   Bot::setup_usertypes(lua_state);
   lua_state["bot"] = this;
   lua_state.open_libraries(sol::lib::base);
 
-  std::cout << "Gateway URI: " << get_gateway_uri() << std::endl;
+  load_commands(modules_dir);
+
   client.on_open = [](std::shared_ptr<Client::Connection> connection) {
     std::cout << "Client: Opened connection" << std::endl;
   };
@@ -171,6 +174,11 @@ void Bot::load_module(fs::path const &path) {
   std::cout << "Loaded module " << path.string() << std::endl;
 }
 
+void Bot::load_commands(fs::path dir) {
+  for (auto &module_path : fs::directory_iterator(dir))
+    load_module(module_path);
+}
+
 void Bot::setup_usertypes(sol::state &state) {
   /* clang-format off */
   state.new_usertype<Bot>("Bot",
@@ -222,7 +230,9 @@ void Bot::add_command(sol::table table) {
   std::cout << "Added command named " << table["name"].get<std::string>()
             << std::endl;
 }
+
 std::string Bot::get_token() { return token; }
+
 void Bot::run() {
   std::cout << "Starting client" << std::endl;
   client.start();
